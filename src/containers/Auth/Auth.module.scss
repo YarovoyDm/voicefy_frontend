@@ -1,0 +1,24 @@
+@import '../../scss/_colors.scss';
+
+.auth {
+    width: 100%;
+    height: calc(100vh - 81px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .authForm {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .sideBlock {
+        position: relative;
+        background: $neptune;
+        color: #ffffff; /* Set your desired text color */
+        height: 100%;
+        width: 50%;
+        clip-path: polygon(0 0, 65% 0, 100% 100%, 0% 100%);
+    }
+}
