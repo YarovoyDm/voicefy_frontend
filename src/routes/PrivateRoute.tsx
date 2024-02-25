@@ -1,18 +1,11 @@
-import { Navigate } from 'react-router-dom';
-import { useAppSelector } from '../store';
-// import { selectUserInfo } from '../store/slices/useSlice';
+import { Navigate, Outlet } from 'react-router-dom';
 
-interface Route {
-    redirectPath: string;
-    children: any;
-}
+export const PrivateRoute = () => {
+    const user = window.localStorage.getItem('token');
 
-export const PrivateRoute = ({ redirectPath = '/auth', children }: Route) => {
-    // const user = useAppSelector(selectUserInfo);
-    // console.log('user', user);
-    // if (!user.nickname) {
-    //     return <Navigate to={redirectPath} replace />;
-    // }
+    if (!user) {
+        return <Navigate to="/auth" />;
+    }
 
-    return children;
+    return <Outlet />;
 };

@@ -1,71 +1,111 @@
 import styles from './SignUpForm.module.scss';
-import Input from '../../components/UI/Input/Input';
-import { useState } from 'react';
-import { useAppDispatch } from '../../store';
-// import { updateUser } from '../../store/slices/useSlice';
 
-interface ISignUp {
-    changeAuthMethod: () => void;
+import { useFormik } from 'formik';
+
+import * as yup from 'yup';
+import Input from '../UI/Input/Input';
+import { useAppDispatch } from 'store/index';
+
+interface IValues {
+    nickname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }
 
-const SignUpForm: React.FC<ISignUp> = ({ changeAuthMethod }) => {
+const signUpValidationSchema = yup.object({
+    nickname: yup.string().min(3, 'Too short').required('Nickname is required'),
+    email: yup
+        .string()
+        .email('Enter a valid email')
+        .required('Email is required'),
+    password: yup
+        .string()
+        .min(8, 'Too Short!')
+        .required('Password is required'),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password')], 'Passwords must match')
+        .required('You need to confirm password'),
+});
+
+const SignUpForm: React.FC = () => {
     const dispatch = useAppDispatch();
-    const [loginData, setLoginData] = useState({
-        nickname: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+
+    const formik = useFormik({
+        initialValues: {
+            nickname: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
+        validationSchema: signUpValidationSchema,
+        onSubmit: (values: IValues) => {
+            // dispatch(fetchAuth(values)).then((res) =>
+            //     window.localStorage.setItem(TOKEN_KEY, res.payload?.token),
+            // );
+            console.log('val', values);
+        },
     });
 
-    const onSignUpFormChange = (event: React.FormEvent<HTMLInputElement>) => {
-        const { name, value } = event.target as HTMLInputElement;
-
-        setLoginData({
-            ...loginData,
-            [name]: value,
-        });
-    };
-
-    const onSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-    };
-
     return (
-        <form onSubmit={onSubmit} className={styles.form}>
-            <div>Welcome back!</div>
+        <form onSubmit={formik.handleSubmit} className={styles.singupForm}>
+            <div className={styles.signupTitle}>Sign Up for an Account</div>
+            <div className={styles.signupSubTitle}>
+                Celebrate Connection: Elevate Your Social Experience with
+                Seamless Sign Up and Vibrant Voice Messaging
+            </div>
             <Input
                 name="nickname"
-                onChange={onSignUpFormChange}
-                value={loginData.nickname}
-                placeholder="@nickname"
+                onChange={formik.handleChange}
+                value={formik.values.nickname}
+                placeholder="Enter your nickname"
+                onBlur={formik.handleBlur}
+                error={
+                    formik.touched.nickname && Boolean(formik.errors.nickname)
+                }
+                errorText={formik.touched.nickname && formik.errors.nickname}
             />
             <Input
                 name="email"
-                onChange={onSignUpFormChange}
-                value={loginData.email}
-                placeholder="E-mail"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                placeholder="Enter your email"
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                errorText={formik.touched.email && formik.errors.email}
             />
             <Input
                 name="password"
-                onChange={onSignUpFormChange}
-                value={loginData.password}
-                placeholder="Password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Enter a strong password"
                 hiddenValue
+                onBlur={formik.handleBlur}
+                error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                }
+                errorText={formik.touched.password && formik.errors.password}
             />
             <Input
                 name="confirmPassword"
-                onChange={onSignUpFormChange}
-                value={loginData.confirmPassword}
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
                 placeholder="Confirm password"
                 hiddenValue
+                onBlur={formik.handleBlur}
+                error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                }
+                errorText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                }
             />
-            <div className={styles.loginWrapper}>
-                <div>Already have an account?</div>
-                <div className={styles.loginLink} onClick={changeAuthMethod}>
-                    Login
-                </div>
-            </div>
-            <button>Sign up</button>
+            <button type="submit" className={styles.signupButton}>
+                SIGN UP
+            </button>
         </form>
     );
 };

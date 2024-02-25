@@ -1,69 +1,84 @@
 import styles from './loginForm.module.scss';
-import Input from '../../components/UI/Input/Input';
-import { useState } from 'react';
-import { useAppDispatch } from '../../store';
-import { fetchAuth } from '../../store/slices/authSlice';
 
-interface ILogin {
-    changeAuthMethod: () => void;
+import { useFormik } from 'formik';
+
+import { TOKEN_KEY } from 'constants/localStorage';
+import { useAppDispatch } from 'store/index';
+import { fetchAuth } from 'store/slices/authSlice';
+import * as yup from 'yup';
+import Input from '../UI/Input/Input';
+
+interface IValues {
+    email: string;
+    password: string;
 }
 
-const LoginForm: React.FC<ILogin> = ({ changeAuthMethod }) => {
+const loginValidationSchema = yup.object({
+    email: yup
+        .string()
+        .email('Enter a valid email')
+        .required('Email is required'),
+    password: yup
+        .string()
+        .min(8, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Password is required'),
+});
+
+const LoginForm: React.FC = () => {
     const dispatch = useAppDispatch();
-    const [loginData, setLoginData] = useState({
-        email: '',
-        password: '',
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: loginValidationSchema,
+        onSubmit: (values: IValues) => {
+            dispatch(fetchAuth(values)).then((res) =>
+                window.localStorage.setItem(TOKEN_KEY, res.payload?.token),
+            );
+        },
     });
-    const onLoginFormChange = (event: React.FormEvent<HTMLInputElement>) => {
-        const { name, value } = event.target as HTMLInputElement;
-
-        setLoginData({
-            ...loginData,
-            [name]: value,
-        });
-    };
-
-    const onSubmit = async (e: React.FormEvent): Promise<void> => {
-        e.preventDefault();
-        dispatch(
-            fetchAuth({ email: loginData.email, password: loginData.password }),
-        ).then((res) =>
-            window.localStorage.setItem('token', res.payload.token),
-        );
-    };
 
     return (
-        <form onSubmit={onSubmit} className={styles.loginForm}>
+        <form onSubmit={formik.handleSubmit} className={styles.loginForm}>
             <div className={styles.loginTitle}>Log in to Your Account</div>
             <div className={styles.loginSubTitle}>
-                Log in to your account, so you can continue keep spreading your
-                thoughts
+                Your Voice, Your Space: Sign in and Immerse Yourself in the
+                Power of Sonic Communication
             </div>
             <Input
                 name="email"
-                onChange={onLoginFormChange}
-                value={loginData.email}
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                onBlur={formik.handleBlur}
                 placeholder="Enter your email address"
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                errorText={formik.touched.email && formik.errors.email}
             />
             <Input
                 name="password"
-                onChange={onLoginFormChange}
-                value={loginData.password}
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                onBlur={formik.handleBlur}
                 placeholder="Enter your password"
                 hiddenValue
+                error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                }
+                errorText={formik.touched.password && formik.errors.password}
             />
             <div className={styles.loginFooter}>
-                <div>
+                <div className={styles.remember}>
                     <input type="checkbox" />
                     <div>Remember Me</div>
                 </div>
-                <div>Forgot password</div>
+                <div className={styles.forgotText}>Forgot password</div>
             </div>
-            {/* <div>
-                <div onClick={changeAuthMethod}>change</div>
-                <div></div>
-            </div> */}
-            <button className={styles.loginButton}>LOG IN</button>
+            <button type="submit" className={styles.loginButton}>
+                LOG IN
+            </button>
         </form>
     );
 };

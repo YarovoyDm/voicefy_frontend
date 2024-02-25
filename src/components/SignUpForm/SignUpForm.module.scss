@@ -1,12 +1,29 @@
-.form {
+@import '../../scss/_colors.scss';
+
+.singupForm {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
     align-items: center;
-    .loginWrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    max-width: 550px;
+    & > div {
+        margin-bottom: 35px;
+    }
+    .signupTitle {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .signupSubTitle {
+        margin-bottom: 70px;
+        text-align: center;
+    }
+    .signupButton {
+        width: 100%;
+        background: $neptune;
+        border-radius: unset;
+        color: #fefbf6;
+        &:hover {
+            border: solid 1px #b67352;
+        }
     }
 }

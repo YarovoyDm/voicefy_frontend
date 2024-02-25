@@ -1,21 +1,26 @@
-import React from 'react';
 
 import styles from './Header.module.scss';
-// import { getAuth, signOut } from 'firebase/auth';
-// import { removeUser } from '../../store/slices/useSlice';
 import { useAppDispatch } from '../../store';
+import { logout } from 'store/slices/authSlice';
+import { LOGO } from 'constants/icons';
+import Icon from 'components/UI/Icon/Icon';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     // const auth = getAuth();
     const dispatch = useAppDispatch();
 
-    const logout = () => {};
+    const onLogoutHandle = () => {
+        dispatch(logout());
+        window.localStorage.removeItem('token');
+    };
 
     return (
         <header className={styles.header}>
-            <button>Login</button>
-            <button>SingUp</button>
-            <button onClick={logout}>Logout</button>
+            <Link to='/'><Icon name={LOGO} width='120px' height='65px'/></Link>
+            
+            <div><button onClick={onLogoutHandle} className={styles.logoutButton}>Logout</button></div>
+            
         </header>
     );
 };

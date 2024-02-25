@@ -2,7 +2,7 @@
 
 .auth {
     width: 100%;
-    height: calc(100vh - 81px);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -20,5 +20,37 @@
         height: 100%;
         width: 50%;
         clip-path: polygon(0 0, 65% 0, 100% 100%, 0% 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        .proposals {
+            width: 50%;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            .authMethodProposalsSubTitle,
+            .authMethodProposalsTitle {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            .authMethodProposalsTitle {
+                font-size: 24px;
+            }
+            .authMethodProposalsButton {
+                border: solid 1px #fefbf6;
+                background: inherit;
+                color: #fefbf6;
+                &:hover {
+                    background: #fefbf6;
+                    color: #8cb9bd;
+                }
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
     }
 }

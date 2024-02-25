@@ -22,12 +22,29 @@
             border: solid 1px #b67352;
         }
     }
+    .error {
+        border: solid 1px red;
+        &:focus {
+            border: solid 1px red;
+            outline: none;
+        }
+        &:hover {
+            border: solid 1px red;
+        }
+    }
     .inputTitle {
         text-transform: capitalize;
         position: absolute;
         top: -25px;
         left: 0;
         font-weight: 500;
+    }
+    .inputError {
+        position: absolute;
+        top: -20px;
+        right: 0;
+        font-size: 12px;
+        color: red;
     }
     svg {
         position: absolute;

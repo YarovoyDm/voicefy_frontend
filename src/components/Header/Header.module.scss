@@ -1,8 +1,18 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0px 50px;
-    height: 80px;
-    border-bottom: solid 1px black;
+    height: 60px;
+    background: #8CB9BD;
+    .logoutButton{
+        background: inherit;
+        border: solid 1px #b67352;
+        color: #FEFBF6;
+        outline: none;
+        &:hover{
+            background: #b67352;
+            color: #FEFBF6;
+        }
+    }
 }

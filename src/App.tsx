@@ -1,42 +1,38 @@
 import './App.css';
 
-import { Routes, Route } from 'react-router-dom';
-import Header from './components/Header/Header';
-import { useEffect, useMemo, useState } from 'react';
-import Auth from './containers/Auth/Auth';
-import Settings from './containers/Settings/Settings';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './store';
+import Layout from './components/Layout/Layout';
+import { fetchAuthMe, selectIsAuth } from './store/slices/authSlice';
 import { PrivateRoute } from './routes/PrivateRoute';
-// import { updateUser } from './store/slices/useSlice';
-import { useAppDispatch } from './store';
+import Settings from './containers/Settings/Settings';
+import Auth from './containers/Auth/Auth';
+import HomePage from 'containers/HomePage/HomePage';
 
-import axios from './axios';
-
-function App() {
+const App = () => {
     const dispatch = useAppDispatch();
-    const [userId, setUserId] = useState<any>(null);
-
-    const id = useMemo(() => userId, [userId]);
+    const isAuth = useAppSelector(selectIsAuth);
 
     useEffect(() => {
-        // axios
-        //     .post('/auth/register', {
-        //         email: 'fronteand@gmail.com',
-        //         password: 'asdasddasd',
-        //         nickname: 'olodlosha',
-        //     })
-        //     .then((res) => console.log(res));
+        dispatch(fetchAuthMe());
     }, []);
 
     return (
-        <div>
-            <Header />
-            <Routes>
-                <Route path="/auth" element={<Auth />} />
+        <Routes>
+            <Route element={<Layout hideHeaderPaths={['/auth']} />}>
+                <Route element={<PrivateRoute />}>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/settings" element={<Settings />} />
+                </Route>
 
-                <Route path="/settings" element={<Settings />} />
-            </Routes>
-        </div>
+                <Route
+                    path="/auth"
+                    element={!isAuth ? <Auth /> : <Navigate to="/" />}
+                />
+            </Route>
+        </Routes>
     );
-}
+};
 
 export default App;

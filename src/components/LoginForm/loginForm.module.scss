@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 550px;
     & > div {
         margin-bottom: 35px;
     }
@@ -11,9 +12,12 @@
         font-size: 24px;
         font-weight: 700;
         margin-bottom: 20px;
+        color: #b67352;
     }
     .loginSubTitle {
         margin-bottom: 70px;
+        text-align: center;
+        color: #b67352;
     }
     .loginFormloginButton {
         width: 100%;
@@ -25,6 +29,29 @@
         color: #fefbf6;
         &:hover {
             border: solid 1px #b67352;
+        }
+    }
+    .loginFooter {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .remember {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-right: 20px;
+            input {
+                accent-color: #b67352;
+            }
+        }
+        .forgotText {
+            font-size: 14px;
+            color: #b67352;
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

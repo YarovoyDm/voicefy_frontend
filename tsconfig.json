@@ -19,7 +19,21 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "types": ["vite-plugin-svgr/client"]
+        "types": ["vite-plugin-svgr/client"],
+        // "baseUrl": ".",
+        // "paths": {
+        //     "src/*": ["src/*"]
+        // }
+        "baseUrl": "./",
+        "paths": {
+            "assets/*": ["./src/assets/*"],
+            "components/*": ["./src/components/*"],
+            "constants/*": ["./src/constants/*"],
+            "containers/*": ["./src/containers/*"],
+            "hooks/*": ["./src/hooks/*"],
+            "scss/*": ["./src/scss/*"],
+            "store/*": ["./src/store/*"]
+        }
     },
     "include": ["src"],
     "references": [{ "path": "./tsconfig.node.json" }]
